@@ -1,52 +1,213 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #87a96b;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  align-items: center;
+  justify-content: center;
+  /* Prevent pull-to-refresh and overscroll */
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.border-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-border {
+  color: #8b9a88;
+  font-size: 32px;
+  letter-spacing: 5px;
+  user-select: none;
+  position: relative;
+  top: 5px;
+}
+
+.bottom-border {
+  color: #8b9a88;
+  font-size: 32px;
+  letter-spacing: 5px;
+  user-select: none;
+  position: relative;
+  bottom: 15px;
+}
+
+
+.middle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.side-border {
+  color: #8b9a88;
+  font-size: 32px;
+  user-select: none;
+}
+
+.canvas {
+  background-color: #87a96b;
+  padding: 3px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  position: relative;
+  cursor: pointer;
+  display: grid;
+  gap: 0;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  user-select: none;
+  color: #6b8e4f;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.tilde {
+  font-size: 32px;
+  color: #6b8e4f;
+}
+
+.note-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  font-size: 64px;
+  cursor: pointer;
+  animation: bounce 1s infinite;
+  transition: transform 0.2s;
+  z-index: 1000;
+  user-select: none;
+}
+
+.note-button:hover {
+  transform: scale(1.2);
+}
+
+.note-button.hidden {
+  display: none;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Mobile optimizations for iPhone 11 and similar devices */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .border-container {
+    gap: 5px;
+    transform: scale(0.95);
+  }
+
+  .top-border,
+  .bottom-border {
+    font-size: 20px;
+    letter-spacing: 3px;
+    top: 0;
+    bottom: 0;
+  }
+
+  .side-border {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .canvas {
+    padding: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .tile {
+    width: 35px;
+    height: 35px;
+    font-size: 28px;
+  }
+
+  .tilde {
+    font-size: 20px;
+  }
+
+  .note-button {
+    font-size: 48px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .note-button:hover {
+    transform: scale(1.1);
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+/* Extra small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .border-container {
+    transform: scale(0.85);
+  }
+
+  .tile {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+  }
+
+  .tilde {
+    font-size: 18px;
+  }
+
+  .top-border,
+  .bottom-border,
+  .side-border {
+    font-size: 18px;
+  }
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
