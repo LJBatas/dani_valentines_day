@@ -7,17 +7,23 @@ const gardeningEmojis = [
    '🌰', '🍄', '🌷', '🌸', '🌻', '🌺'
 ];
 
+// Tree emojis for the cross pattern
+const treeEmojis = ['🌳'];
+
+// Flower emojis for the corner patterns
+const flowerEmojis = ['🌷', '🌸', '🌺', '🌻', '🌼', '🌹'];
+
 // Grid settings - responsive
 let TILE_SIZE = 60; // Size of each grid tile in pixels
-let GRID_COLS = 10;
-let GRID_ROWS = 8;
+let GRID_COLS = 9;
+let GRID_ROWS = 9;
 
 // Adjust grid for mobile devices
 if (window.innerWidth <= 768) {
-  TILE_SIZE = 35;
+  TILE_SIZE = 32;
 }
 if (window.innerWidth <= 375) {
-  TILE_SIZE = 32;
+  TILE_SIZE = 28;
 }
 
 let gridData = {}; // Store occupied tiles as "x,y": true
@@ -117,6 +123,198 @@ function initCanvas() {
     window.location.href = '/secret.html';
   });
   app.appendChild(noteButton);
+  
+  // Create clear button
+  const clearButton = document.createElement('button');
+  clearButton.className = 'clear-button';
+  clearButton.textContent = 'Clear Garden';
+  clearButton.addEventListener('click', clearGarden);
+  app.appendChild(clearButton);
+  
+  // Create heart pattern button
+  const heartButton = document.createElement('button');
+  heartButton.className = 'pattern-button';
+  heartButton.textContent = '1';
+  heartButton.addEventListener('click', fillHeartPattern);
+  app.appendChild(heartButton);
+  
+  // Animate the cross pattern with trees after a short delay
+  setTimeout(() => {
+    animateCrossPattern();
+  }, 500);
+}
+
+// Clear all emojis and restore tildes
+function clearGarden() {
+  const tiles = document.querySelectorAll('.tile');
+  
+  tiles.forEach((tile, index) => {
+    const row = Math.floor(index / GRID_COLS);
+    const col = index % GRID_COLS;
+    const key = getGridKey(col, row);
+    
+    // Reset grid data
+    gridData[key] = false;
+    
+    // Restore tilde
+    tile.innerHTML = '';
+    const tilde = document.createElement('span');
+    tilde.className = 'tilde';
+    tilde.textContent = '~';
+    tile.appendChild(tilde);
+  });
+  
+  // Check easter egg (should hide it)
+  checkEasterEgg();
+}
+
+// Fill board with heart pattern
+function fillHeartPattern() {
+  // First clear the garden
+  clearGarden();
+  
+  // Define heart shape for 9x9 grid
+  const heartPattern = [
+    // Row 0: two bumps at top
+    { col: 2, row: 0 }, { col: 3, row: 0 }, { col: 5, row: 0 }, { col: 6, row: 0 },
+    // Row 1: wider
+    { col: 1, row: 1 }, { col: 2, row: 1 }, { col: 3, row: 1 }, { col: 4, row: 1 },
+    { col: 5, row: 1 }, { col: 6, row: 1 }, { col: 7, row: 1 },
+    // Row 2: full width
+    { col: 0, row: 2 }, { col: 1, row: 2 }, { col: 2, row: 2 }, { col: 3, row: 2 },
+    { col: 4, row: 2 }, { col: 5, row: 2 }, { col: 6, row: 2 }, { col: 7, row: 2 }, { col: 8, row: 2 },
+    // Row 3: full width
+    { col: 0, row: 3 }, { col: 1, row: 3 }, { col: 2, row: 3 }, { col: 3, row: 3 },
+    { col: 4, row: 3 }, { col: 5, row: 3 }, { col: 6, row: 3 }, { col: 7, row: 3 }, { col: 8, row: 3 },
+    // Row 4: narrowing
+    { col: 1, row: 4 }, { col: 2, row: 4 }, { col: 3, row: 4 }, { col: 4, row: 4 },
+    { col: 5, row: 4 }, { col: 6, row: 4 }, { col: 7, row: 4 },
+    // Row 5: narrowing more
+    { col: 2, row: 5 }, { col: 3, row: 5 }, { col: 4, row: 5 }, { col: 5, row: 5 }, { col: 6, row: 5 },
+    // Row 6: narrowing more
+    { col: 3, row: 6 }, { col: 4, row: 6 }, { col: 5, row: 6 },
+    // Row 7: point
+    { col: 4, row: 7 }
+  ];
+  
+  // Sort by row for top-to-bottom animation
+  const sortedPattern = heartPattern.sort((a, b) => {
+    if (a.row !== b.row) return a.row - b.row;
+    return a.col - b.col;
+  });
+  
+  // Heart emoji for filling
+    const heartEmojis = ['🌷', '🌸', '🌺',];
+    
+  // Animate each position appearing one by one from top to bottom
+  sortedPattern.forEach(({ col, row }, index) => {
+    setTimeout(() => {
+      if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS) {
+        const key = getGridKey(col, row);
+        const tileIndex = row * GRID_COLS + col;
+        const tiles = document.querySelectorAll('.tile');
+        const tile = tiles[tileIndex];
+        
+        if (tile) {
+          // Mark as occupied
+          gridData[key] = true;
+          
+          // Replace tilde with random heart emoji
+          tile.innerHTML = '';
+          const randomHeart = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+          tile.textContent = randomHeart;
+          
+          // Add animation class for fade-in effect
+          tile.style.animation = 'fadeIn 0.3s ease-in';
+        }
+      }
+      
+      // Check easter egg after last heart is placed
+      if (index === sortedPattern.length - 1) {
+        setTimeout(() => checkEasterEgg(), 100);
+      }
+    }, index * 80); // 80ms delay between each heart
+  });
+}
+
+// Animate tree cross pattern and corner flowers appearing gradually from top to bottom
+function animateCrossPattern() {
+  // Calculate center position (grid is 9x9, so center is at index 4)
+  const centerCol = Math.floor(GRID_COLS / 2); // Column 4 (0-indexed)
+  const centerRow = Math.floor(GRID_ROWS / 2); // Row 4 (0-indexed)
+  
+  // Define cross pattern coordinates (trees)
+  const crossPattern = [
+    // Vertical arm
+    { col: centerCol, row: centerRow - 1, type: 'tree' },
+    { col: centerCol, row: centerRow, type: 'tree' },
+    { col: centerCol, row: centerRow + 1, type: 'tree' },
+    // Horizontal arm (excluding center which is already in vertical)
+    { col: centerCol - 1, row: centerRow, type: 'tree' },
+    { col: centerCol + 1, row: centerRow, type: 'tree' },
+  ];
+  
+  // Define corner flower patterns (2x2 minus the actual corner)
+  const cornerFlowers = [
+    // Top-left corner (exclude 0,0)
+    { col: 1, row: 0, type: 'flower' },
+    { col: 0, row: 1, type: 'flower' },
+    { col: 1, row: 1, type: 'flower' },
+    // Top-right corner (exclude 8,0)
+    { col: 7, row: 0, type: 'flower' },
+    { col: 8, row: 1, type: 'flower' },
+    { col: 7, row: 1, type: 'flower' },
+    // Bottom-left corner (exclude 0,8)
+    { col: 0, row: 7, type: 'flower' },
+    { col: 1, row: 8, type: 'flower' },
+    { col: 1, row: 7, type: 'flower' },
+    // Bottom-right corner (exclude 8,8)
+    { col: 7, row: 8, type: 'flower' },
+    { col: 8, row: 7, type: 'flower' },
+    { col: 7, row: 7, type: 'flower' },
+  ];
+  
+  // Combine all patterns and sort by row (top to bottom)
+  const allPatterns = [...crossPattern, ...cornerFlowers].sort((a, b) => {
+    if (a.row !== b.row) return a.row - b.row;
+    return a.col - b.col; // If same row, sort by column
+  });
+  
+  // Animate each emoji appearing one by one from top to bottom
+  allPatterns.forEach(({ col, row, type }, index) => {
+    setTimeout(() => {
+      // Make sure coordinates are within bounds
+      if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS) {
+        const key = getGridKey(col, row);
+        const tileIndex = row * GRID_COLS + col;
+        const tiles = document.querySelectorAll('.tile');
+        const tile = tiles[tileIndex];
+        
+        if (tile) {
+          // Mark as occupied
+          gridData[key] = true;
+          
+          // Replace tilde with random emoji based on type
+          tile.innerHTML = '';
+          if (type === 'tree') {
+            const randomTree = treeEmojis[Math.floor(Math.random() * treeEmojis.length)];
+            tile.textContent = randomTree;
+          } else {
+            const randomFlower = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+            tile.textContent = randomFlower;
+          }
+          
+          // Add animation class for fade-in effect
+          tile.style.animation = 'fadeIn 0.3s ease-in';
+        }
+      }
+      
+      // Check easter egg after last item is placed
+      if (index === allPatterns.length - 1) {
+        setTimeout(() => checkEasterEgg(), 100);
+      }
+    }, index * 100); // 100ms delay between each emoji
+  });
 }
 
 // Handle tile interaction (place or remove emoji)

@@ -37,7 +37,7 @@ body {
 }
 
 .top-border {
-  color: #8b9a88;
+  color: #000000;
   font-size: 32px;
   letter-spacing: 5px;
   user-select: none;
@@ -46,7 +46,7 @@ body {
 }
 
 .bottom-border {
-  color: #8b9a88;
+  color: #000000;
   font-size: 32px;
   letter-spacing: 5px;
   user-select: none;
@@ -62,7 +62,7 @@ body {
 }
 
 .side-border {
-  color: #8b9a88;
+  color: #000000;
   font-size: 32px;
   user-select: none;
 }
@@ -88,14 +88,14 @@ body {
   justify-content: center;
   font-size: 48px;
   user-select: none;
-  color: #6b8e4f;
+  color: #99d469;
   -webkit-tap-highlight-color: transparent;
   touch-action: none;
 }
 
 .tilde {
   font-size: 32px;
-  color: #6b8e4f;
+  color: #2c6100;
 }
 
 .note-button {
@@ -118,12 +118,82 @@ body {
   display: none;
 }
 
+.clear-button {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  padding: 12px 24px;
+  background-color: #87a96b;
+  color: #fff;
+  border: 2px solid #6b8e4f;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.clear-button:hover {
+  background-color: #6b8e4f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+.clear-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pattern-button {
+  position: fixed;
+  bottom: 80px;
+  left: 30px;
+  padding: 12px 20px;
+  background-color: #d4a5a5;
+  color: #fff;
+  border: 2px solid #b08080;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-width: 50px;
+}
+
+.pattern-button:hover {
+  background-color: #b08080;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+.pattern-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -135,7 +205,7 @@ body {
 
   .border-container {
     gap: 5px;
-    transform: scale(0.95);
+    transform: scale(0.85);
   }
 
   .top-border,
@@ -158,13 +228,13 @@ body {
   }
 
   .tile {
-    width: 35px;
-    height: 35px;
-    font-size: 28px;
+    width: 32px;
+    height: 32px;
+    font-size: 26px;
   }
 
   .tilde {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .note-button {
@@ -175,6 +245,20 @@ body {
 
   .note-button:hover {
     transform: scale(1.1);
+  }
+
+  .clear-button {
+    font-size: 14px;
+    padding: 10px 20px;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .pattern-button {
+    font-size: 16px;
+    padding: 10px 18px;
+    bottom: 70px;
+    left: 20px;
   }
 
   @keyframes bounce {
@@ -190,23 +274,23 @@ body {
 /* Extra small screens (iPhone SE, etc.) */
 @media (max-width: 375px) {
   .border-container {
-    transform: scale(0.85);
+    transform: scale(0.75);
   }
 
   .tile {
-    width: 32px;
-    height: 32px;
-    font-size: 24px;
+    width: 28px;
+    height: 28px;
+    font-size: 22px;
   }
 
   .tilde {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .top-border,
   .bottom-border,
   .side-border {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 .logo:hover {
