@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background: #000;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+p {
+    font-size: 12px;
+    line-height: 8px;
+    text-align: justify;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background: url(dani.jpg) no-repeat center;
+    background-attachment: fixed;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: rgb(225, 225, 255, 0);
+    margin: 0;
+}

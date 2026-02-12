@@ -133,10 +133,17 @@ function initCanvas() {
   
   // Create heart pattern button
   const heartButton = document.createElement('button');
-  heartButton.className = 'pattern-button';
+  heartButton.className = 'pattern-button pattern-button-1';
   heartButton.textContent = '1';
   heartButton.addEventListener('click', fillHeartPattern);
   app.appendChild(heartButton);
+  
+  // Create random fill button
+  const randomButton = document.createElement('button');
+  randomButton.className = 'pattern-button pattern-button-2';
+  randomButton.textContent = '2';
+  randomButton.addEventListener('click', fillRandomPattern);
+  app.appendChild(randomButton);
   
   // Animate the cross pattern with trees after a short delay
   setTimeout(() => {
@@ -235,6 +242,50 @@ function fillHeartPattern() {
       }
     }, index * 80); // 80ms delay between each heart
   });
+}
+
+// Fill board with random gardening emojis at random positions
+function fillRandomPattern() {
+  // First clear the garden
+  clearGarden();
+  
+  // Generate random positions (about 40-50% of the grid)
+  const totalTiles = GRID_COLS * GRID_ROWS;
+  const numEmojis = Math.floor(totalTiles * 0.45); // 45% fill rate
+  
+  // Create array of all possible positions
+  const allPositions = [];
+  for (let row = 0; row < GRID_ROWS; row++) {
+    for (let col = 0; col < GRID_COLS; col++) {
+      allPositions.push({ col, row });
+    }
+  }
+  
+  // Shuffle and take random positions
+  const shuffled = allPositions.sort(() => Math.random() - 0.5);
+  const randomPositions = shuffled.slice(0, numEmojis);
+  
+  // Fill all positions instantly (no animation)
+  randomPositions.forEach(({ col, row }) => {
+    if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS) {
+      const key = getGridKey(col, row);
+      const tileIndex = row * GRID_COLS + col;
+      const tiles = document.querySelectorAll('.tile');
+      const tile = tiles[tileIndex];
+      
+      if (tile) {
+        // Mark as occupied
+        gridData[key] = true;
+        
+        // Replace tilde with random gardening emoji
+        tile.innerHTML = '';
+        tile.textContent = getRandomEmoji();
+      }
+    }
+  });
+  
+  // Check easter egg after filling
+  checkEasterEgg();
 }
 
 // Animate tree cross pattern and corner flowers appearing gradually from top to bottom

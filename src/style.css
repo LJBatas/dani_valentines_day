@@ -177,6 +177,20 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.pattern-button-1 {
+  bottom: 80px;
+}
+
+.pattern-button-2 {
+  bottom: 130px;
+  background-color: #a5c9d4;
+  border-color: #7fa8b8;
+}
+
+.pattern-button-2:hover {
+  background-color: #7fa8b8;
+}
+
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -257,8 +271,15 @@ body {
   .pattern-button {
     font-size: 16px;
     padding: 10px 18px;
-    bottom: 70px;
     left: 20px;
+  }
+
+  .pattern-button-1 {
+    bottom: 70px;
+  }
+
+  .pattern-button-2 {
+    bottom: 115px;
   }
 
   @keyframes bounce {
